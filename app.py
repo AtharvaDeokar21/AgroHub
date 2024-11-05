@@ -120,11 +120,11 @@ def sales():
         if crop_info is None:
             flash('Invalid crop selected. Please select a valid crop.', 'danger')
             return redirect(url_for('sales'))
-        if crop_info.Status == 'Unavailable':
+        if crop_info.Status == 'unavailable':
             flash('You cannot record a sale for this crop because it is currently unavailable.', 'danger')
             return redirect(url_for('sales'))
 
-        total_earnings = quantity_sold * price_per_unit * 1000
+        total_earnings = quantity_sold * price_per_unit 
         new_sale = Sales(
             DateOfSale=form.date_of_sale.data,
             PricePerUnit=price_per_unit,
@@ -138,7 +138,7 @@ def sales():
 
         total_sold = db.session.query(db.func.sum(Sales.QuantitySold)).filter(Sales.CropId == crop_id).scalar() or 0
         if total_sold >= crop_info.EstimatedYield:
-            crop_info.Status = 'Unavailable'
+            crop_info.Status = 'unavailable'
             db.session.commit()
 
         flash('Sale recorded successfully!', 'success')
@@ -196,9 +196,11 @@ def update_sale(sale_id):
         crop_info = CropInfo.query.get(sale.CropId)
         total_sold = db.session.query(db.func.sum(Sales.QuantitySold)).filter(Sales.CropId == sale.CropId).scalar() or 0
         if total_sold >= crop_info.EstimatedYield:
-            crop_info.Status = 'Unavailable'
+            crop_info.Status = 'unavailable'
             db.session.commit()
-
+        if total_sold < crop_info.EstimatedYield:
+            crop_info.Status = 'available'
+            db.session.commit()
         flash('Sale updated successfully!', 'success')
         return redirect(url_for('dashboard'))
 
