@@ -21,8 +21,8 @@ To set up the project locally, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/monsterup777/DBMS_Farmer_Agriculter.git
-   cd DBMS_Farmer_Agriculter
+   git clone https://github.com/AtharvaDeokar21/AgroHub.git
+   cd AgroHub
 2. Create a virtual environment and activate it:
    ```bash
    python -m venv venv
